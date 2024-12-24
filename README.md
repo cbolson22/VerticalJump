@@ -30,11 +30,18 @@ venv\Scripts\activate
 
 ### 3. Install Dependencies
 ```bash
+pip install -r requirements.txt
+```
+
+
+### How to Run the Game
+Once the environment is set up, run the game using:
+```bash
 python vertical_jump.py
 ```
 
 
-### 4. Contributing
+### Contributing
 Feel free to fork the repository and submit pull requests for improvements or new features!
 
 
