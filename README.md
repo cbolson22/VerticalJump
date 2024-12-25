@@ -9,7 +9,7 @@ This game requires Python and the `pygame` library. Follow the steps below to se
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/VerticalJump.git
+git clone https://github.com/cbolson22/VerticalJump.git
 cd VerticalJump
 ```
 
