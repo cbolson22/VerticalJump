@@ -1,6 +1,8 @@
 import pygame
 import random
 import os
+from spritesheet import SpriteSheet
+from enemy import Enemy
 
 
 ##### INITIALIZATION #####
@@ -54,6 +56,9 @@ font_big = pygame.font.SysFont('Lucida Sans', 24)
 player_image = pygame.image.load('assets/jump.png').convert_alpha()
 background_image = pygame.image.load('assets/background_image.png').convert_alpha()
 box_image = pygame.image.load('assets/box.png').convert_alpha()
+## Spike Enemy Spritesheet
+spike_sheet_img = pygame.image.load('assets/spike_enemy.png').convert_alpha()
+spike_sheet = SpriteSheet(spike_sheet_img)
 
 
 
@@ -143,12 +148,16 @@ class Player():
         self.rect.x += dx
         self.rect.y += dy + scroll
 
+
+        ## Update mask
+        self.mask = pygame.mask.from_surface(self.image)
+
+
         return scroll
 
 
     def draw(self):
         window.blit(pygame.transform.flip(self.image, self.flip, False), (self.rect.x - 10 , self.rect.y - 5))
-        pygame.draw.rect(window, WHITE, self.rect, 2)
 
 
 ## Box Class
@@ -194,6 +203,9 @@ player = Player(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 150)
 ## Box Instances Group
 box_group = pygame.sprite.Group()
 
+## Enemy Sprite Groups
+enemy_group = pygame.sprite.Group()
+
 ## Initial Box
 box = Box(WINDOW_WIDTH // 2 - 25, WINDOW_HEIGHT - 50, 50, False)
 box_group.add(box)
@@ -237,6 +249,15 @@ while run:
         box_group.update(scroll)
 
 
+        ## Generate Enemies
+        if len(enemy_group) == 0 and score > 1500:
+            enemy = Enemy(WINDOW_WIDTH, 100, spike_sheet, 1.5)
+            enemy_group.add(enemy)
+
+        ## Update Enemies
+        enemy_group.update(scroll, WINDOW_WIDTH)
+
+
         ## Update Score
         score += scroll
 
@@ -252,13 +273,18 @@ while run:
 
         ## Draw Sprites
         box_group.draw(window)
+        enemy_group.draw(window)
         player.draw()
 
 
         ## Check game over
         if player.rect.top > WINDOW_HEIGHT:
             game_over = True
-    
+        if pygame.sprite.spritecollide(player, enemy_group, False):
+            if pygame.sprite.spritecollide(player, enemy_group, False, pygame.sprite.collide_mask):
+                game_over = True
+
+
     ## Game Over
     else:
         ## Fade Squares
@@ -291,6 +317,8 @@ while run:
                 fade_counter = 0
                 ## Reposition Player
                 player.rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 150)
+                ## Reset Enemies
+                enemy_group.empty()
                 ## Reset Boxes
                 box_group.empty()
                 ## Initial Box
