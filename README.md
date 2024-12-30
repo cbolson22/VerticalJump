@@ -45,3 +45,5 @@ python vertical_jump.py
 Feel free to fork the repository and submit pull requests for improvements or new features!
 
 
+### Citing Sources
+I used this youtube playlist to guide the making of this project to get used to pygame: https://www.youtube.com/watch?v=5FMPAt0n3Nc&list=PLjcN1EyupaQlBSrfP4_9SdpJIcfnSJgzL
